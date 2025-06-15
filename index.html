@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruta de Aprendizaje Web Interactivo para Educadores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Stone, Amber, Teal) -->
+    <!-- Application Structure Plan: A four-tab dashboard ('Visión General', 'Ruta de Aprendizaje', 'Ideas para tu Clase', 'Recursos Clave'). This non-linear structure allows the educator to explore the learning path based on their immediate needs (e.g., see the big picture, dive into a specific month, get project ideas, or find a resource). It's more of a practical tool than a static report, which enhances usability and engagement for a busy teacher. -->
+    <!-- Visualization & Content Choices: Section I (Why Learn): Interactive info cards (HTML/CSS/JS) to quickly convey roles. Section III (The Plan): An interactive accordion for the 6-month agenda, which is more digestible than a long table, paired with a Chart.js bar chart to visualize the increasing complexity over time. Section IV (The Goal): A visual grid of project ideas to provide motivation. This mix of text, icons, and a chart makes the dense information of the report more engaging and easier to synthesize. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-btn.active {
+            border-color: #0d9488;
+            color: #0d9488;
+            background-color: #f0fdfa;
+        }
+        .accordion-header {
+            transition: background-color 0.3s ease;
+        }
+        .accordion-header.active {
+            background-color: #ccfbf1;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-teal-800">Tu Ruta de Aprendizaje Interactivo</h1>
+            <p class="mt-2 text-lg text-stone-600">Una guía para crear clases dinámicas con HTML, CSS y JavaScript.</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
+            <button data-tab="vision" class="tab-btn active text-sm md:text-base font-medium py-2 px-4 rounded-full border-2 border-transparent hover:bg-teal-50 transition-colors">🗺️ Visión General</button>
+            <button data-tab="ruta" class="tab-btn text-sm md:text-base font-medium py-2 px-4 rounded-full border-2 border-transparent hover:bg-teal-50 transition-colors">🗓️ Ruta de Aprendizaje</button>
+            <button data-tab="ideas" class="tab-btn text-sm md:text-base font-medium py-2 px-4 rounded-full border-2 border-transparent hover:bg-teal-50 transition-colors">💡 Ideas para tu Clase</button>
+            <button data-tab="recursos" class="tab-btn text-sm md:text-base font-medium py-2 px-4 rounded-full border-2 border-transparent hover:bg-teal-50 transition-colors">📚 Recursos Clave</button>
+        </nav>
+
+        <main>
+            <section id="vision" class="tab-content">
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-2xl font-bold text-center text-teal-700 mb-6">El Trío Poderoso de la Web</h2>
+                    <p class="text-center text-stone-600 max-w-3xl mx-auto mb-8">
+                        Para crear experiencias web interactivas, necesitas tres tecnologías que trabajan en perfecta sinergia. HTML define la estructura, CSS le da estilo y JavaScript le da vida con interactividad. A continuación, explora el rol de cada una en el contexto educativo.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="border border-stone-200 rounded-xl p-6 hover:shadow-lg hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-xl font-bold mb-2 text-amber-700 flex items-center gap-2"><span class="text-2xl">🏗️</span> HTML: La Estructura</h3>
+                            <p class="text-stone-600">Es el esqueleto de tus lecciones. Con HTML, organizas el contenido de forma semántica: preguntas de un cuestionario, textos de una lectura o los pasos de un tutorial. Es la base sobre la que todo se construye.</p>
+                        </div>
+                        <div class="border border-stone-200 rounded-xl p-6 hover:shadow-lg hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-xl font-bold mb-2 text-sky-700 flex items-center gap-2"><span class="text-2xl">🎨</span> CSS: El Estilo</h3>
+                            <p class="text-stone-600">Es el diseñador de tus materiales. CSS se encarga de la apariencia visual: colores, fuentes y diseño. Transforma una estructura simple en una interfaz atractiva y fácil de usar que capta la atención de tus estudiantes.</p>
+                        </div>
+                        <div class="border border-stone-200 rounded-xl p-6 hover:shadow-lg hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-xl font-bold mb-2 text-emerald-700 flex items-center gap-2"><span class="text-2xl">🚀</span> JavaScript: La Interactividad</h3>
+                            <p class="text-stone-600">Es el motor que da vida a tus clases. Con JavaScript, creas cuestionarios que se autoevalúan, simulaciones que reaccionan a las acciones del usuario y juegos que ofrecen retroalimentación instantánea.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ruta" class="tab-content hidden">
+                 <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-2xl font-bold text-center text-teal-700 mb-2">Tu Plan de 6 Meses</h2>
+                     <p class="text-center text-stone-600 max-w-3xl mx-auto mb-8">
+                        Esta es tu hoja de ruta. Cada mes se enfoca en desarrollar habilidades clave, desde los fundamentos hasta técnicas avanzadas. Haz clic en cada mes para ver los detalles, conceptos y proyectos sugeridos.
+                    </p>
+                    
+                    <div class="chart-container mb-12">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+
+                    <div id="accordion-container" class="space-y-4"></div>
+                </div>
+            </section>
+
+            <section id="ideas" class="tab-content hidden">
+                 <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-2xl font-bold text-center text-teal-700 mb-6">Proyectos para Inspirar tus Clases</h2>
+                     <p class="text-center text-stone-600 max-w-3xl mx-auto mb-8">
+                        Al dominar estas herramientas, podrás crear una infinidad de recursos educativos. Aquí tienes algunas ideas para hacer tus clases más interactivas y emocionantes.
+                    </p>
+                    <div id="ideas-container" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+            </section>
+
+            <section id="recursos" class="tab-content hidden">
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-2xl font-bold text-center text-teal-700 mb-6">Recursos Clave para tu Aprendizaje</h2>
+                    <p class="text-center text-stone-600 max-w-3xl mx-auto mb-8">
+                        No estás solo en este viaje. Aquí tienes una lista centralizada de los recursos más recomendados para dominar el desarrollo web.
+                    </p>
+                    <div id="resources-container" class="overflow-x-auto"></div>
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <script>
+        const learningPathData = [
+            {
+                month: "Mes 1: Fundamentos Web",
+                focus: "HTML y CSS Esencial",
+                concepts: "Estructura de documentos HTML, etiquetas comunes, formularios básicos. Selectores CSS, modelo de caja, estilos de texto y color.",
+                projects: "Convertir un folleto en una página HTML. Diseñar una 'ficha' de estudiante con CSS.",
+                resources: ["MDN Web Docs: HTML & CSS", "freeCodeCamp: Basic HTML & CSS"]
+            },
+            {
+                month: "Mes 2: Diseño y Flexibilidad",
+                focus: "Diseño Responsivo y Animaciones",
+                concepts: "Media Queries para adaptabilidad. Flexbox para diseño unidimensional. CSS Grid para diseño bidimensional. Transiciones y animaciones básicas.",
+                projects: "Crear una página de recursos que se adapte a móviles. Diseñar un 'tablero de anuncios' con efectos visuales.",
+                resources: ["freeCodeCamp: Responsive Design", "MDN: Flexbox, Grid, Animations"]
+            },
+            {
+                month: "Mes 3: JavaScript Básico e Interacción",
+                focus: "JS, DOM y Eventos",
+                concepts: "Variables, tipos de datos, condicionales, bucles, funciones. Manipulación del DOM: seleccionar, modificar, crear y eliminar elementos. Manejo de eventos (`addEventListener`).",
+                projects: "Calculadora de notas simple. Lista de tareas interactiva. Cuestionario con retroalimentación instantánea.",
+                resources: ["MDN: JavaScript Fundamentals", "The Odin Project: DOM Manipulation"]
+            },
+            {
+                month: "Mes 4: JavaScript Avanzado y Estructura",
+                focus: "ES6+, Manipulación CSS y Asincronía",
+                concepts: "Funciones flecha, literales de plantilla, desestructuración. Manipulación de `classList`. Promesas y `async/await`. Introducción a Git y GitHub.",
+                projects: "Cambiador de temas (claro/oscuro). Validador de formularios complejo. Simular carga de datos de estudiantes.",
+                resources: ["MDN: ES6+", "Pro Git book (online)"]
+            },
+            {
+                month: "Mes 5: Paradigmas y Patrones",
+                focus: "POO, PF y Patrones de Diseño",
+                concepts: "Programación Orientada a Objetos (clases, herencia). Programación Funcional (map, filter, reduce). Patrones de diseño comunes (Singleton, Observer).",
+                projects: "Reestructurar el código del cuestionario usando clases. Procesar datos de estudiantes con funciones de orden superior.",
+                resources: ["freeCodeCamp: OOP & FP", "BrowserStack: Design Patterns"]
+            },
+            {
+                month: "Mes 6: Aplicaciones Avanzadas y Simulación",
+                focus: "Juegos Educativos y Simulaciones",
+                concepts: "Lógica de juego, gestión de estado. Uso de Canvas para gráficos. Simulaciones de física o matemáticas básicas (aleatoriedad, fuerzas).",
+                projects: "Juego de memoria. Ahorcado. Simulación de un sistema de partículas simple.",
+                resources: ["Khan Academy: Advanced JS Simulations", "CodingNepal: JS Games"]
+            }
+        ];
+
+        const ideasData = [
+            { title: "Cuestionarios Dinámicos", icon: "📝", description: "Crea pruebas con tiempo, puntuación en vivo y retroalimentación inmediata que se adaptan al nivel del estudiante." },
+            { title: "Juegos Educativos", icon: "🎮", description: "Diseña juegos como 'Ahorcado' o 'Memoria' para reforzar vocabulario, fechas o conceptos clave de forma divertida." },
+            { title: "Simulaciones Científicas", icon: "🔬", description: "Visualiza conceptos abstractos de física o química, permitiendo a los estudiantes manipular variables y ver resultados." },
+            { title: "Diagramas Interactivos", icon: "🗺️", description: "Transforma imágenes estáticas en herramientas de aprendizaje donde los alumnos exploran información haciendo clic." },
+            { title: "Visualizadores de Datos", icon: "📊", description: "Crea gráficos interactivos para que los estudiantes exploren y entiendan conjuntos de datos de historia o ciencias." },
+            { title: "Líneas de Tiempo Interactivas", icon: "⏳", description: "Construye líneas de tiempo para eventos históricos que revelen información, imágenes y videos al interactuar." }
+        ];
+
+        const resourcesData = [
+            { name: "MDN Web Docs", url: "https://developer.mozilla.org/", description: "La documentación de referencia para todas las tecnologías web. Esencial y muy completa." },
+            { name: "freeCodeCamp", url: "https://www.freecodecamp.org/", description: "Plataforma de aprendizaje interactivo con certificaciones basadas en proyectos reales." },
+            { name: "The Odin Project", url: "https://www.theodinproject.com/", description: "Un currículo de código abierto y gratuito para aprender desarrollo web de forma estructurada." },
+            { name: "Khan Academy", url: "https://www.khanacademy.org/computing/computer-programming", description: "Ofrece cursos excelentes y prácticos sobre programación, incluyendo JavaScript avanzado." },
+            { name: "Codepen", url: "https://codepen.io/", description: "Un 'patio de recreo' para experimentar con código HTML, CSS y JS y ver el trabajo de otros." },
+            { name: "GitHub", url: "https://github.com/", description: "Plataforma indispensable para el control de versiones con Git y para colaborar en proyectos." }
+        ];
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(item => item.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    const target = tab.getAttribute('data-tab');
+                    contents.forEach(content => {
+                        if (content.id === target) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const accordionContainer = document.getElementById('accordion-container');
+            learningPathData.forEach((item, index) => {
+                const accordionItem = document.createElement('div');
+                accordionItem.className = 'border border-stone-200 rounded-xl';
+                
+                const header = document.createElement('div');
+                header.className = 'accordion-header cursor-pointer p-4 flex justify-between items-center hover:bg-stone-100';
+                header.innerHTML = `
+                    <div>
+                        <h3 class="font-semibold text-lg text-teal-800">${item.month}</h3>
+                        <p class="text-sm text-stone-500">${item.focus}</p>
+                    </div>
+                    <span class="transform transition-transform duration-300 text-teal-600 font-bold text-xl">+</span>
+                `;
+                
+                const content = document.createElement('div');
+                content.className = 'accordion-content';
+                content.innerHTML = `
+                    <div class="p-4 border-t border-stone-200">
+                        <p class="mb-2"><strong class="font-semibold">Conceptos Clave:</strong> ${item.concepts}</p>
+                        <p class="mb-2"><strong class="font-semibold">Proyectos Sugeridos:</strong> ${item.projects}</p>
+                        <p><strong class="font-semibold">Recursos Principales:</strong> ${item.resources.join(', ')}</p>
+                    </div>
+                `;
+                
+                accordionItem.appendChild(header);
+                accordionItem.appendChild(content);
+                accordionContainer.appendChild(accordionItem);
+
+                header.addEventListener('click', () => {
+                    const isActive = header.classList.toggle('active');
+                    const icon = header.querySelector('span');
+                    icon.textContent = isActive ? '−' : '+';
+                    icon.classList.toggle('rotate-90', isActive);
+
+                    if (isActive) {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    } else {
+                        content.style.maxHeight = "0";
+                    }
+                });
+            });
+            
+            const ideasContainer = document.getElementById('ideas-container');
+            ideasData.forEach(idea => {
+                const ideaCard = document.createElement('div');
+                ideaCard.className = 'bg-stone-100 p-6 rounded-xl flex flex-col items-center text-center transition-all duration-300 hover:shadow-md hover:bg-teal-50';
+                ideaCard.innerHTML = `
+                    <div class="text-4xl mb-4">${idea.icon}</div>
+                    <h3 class="font-bold text-lg mb-2 text-teal-900">${idea.title}</h3>
+                    <p class="text-stone-600 text-sm">${idea.description}</p>
+                `;
+                ideasContainer.appendChild(ideaCard);
+            });
+            
+            const resourcesContainer = document.getElementById('resources-container');
+            const table = document.createElement('table');
+            table.className = 'min-w-full bg-white divide-y divide-stone-200';
+            table.innerHTML = `
+                <thead class="bg-stone-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Recurso</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Descripción</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-stone-200">
+                </tbody>
+            `;
+            const tbody = table.querySelector('tbody');
+            resourcesData.forEach(resource => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="text-base font-medium text-teal-600 hover:text-teal-800">${resource.name}</a>
+                    </td>
+                    <td class="px-6 py-4 whitespace-normal text-sm text-stone-500">${resource.description}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            resourcesContainer.appendChild(table);
+
+
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: learningPathData.map(item => item.month.split(':')[0]),
+                    datasets: [{
+                        label: 'Complejidad y Profundidad',
+                        data: [1, 2, 3, 4, 5, 6],
+                        backgroundColor: [
+                            'rgba(192, 132, 252, 0.2)', // Mes 1
+                            'rgba(129, 140, 248, 0.2)', // Mes 2
+                            'rgba(96, 165, 250, 0.2)',  // Mes 3
+                            'rgba(52, 211, 153, 0.2)',  // Mes 4
+                            'rgba(251, 191, 36, 0.2)',  // Mes 5
+                            'rgba(248, 113, 113, 0.2)'   // Mes 6
+                        ],
+                        borderColor: [
+                            'rgba(192, 132, 252, 1)',
+                            'rgba(129, 140, 248, 1)',
+                            'rgba(96, 165, 250, 1)',
+                            'rgba(52, 211, 153, 1)',
+                            'rgba(251, 191, 36, 1)',
+                            'rgba(248, 113, 113, 1)'
+                        ],
+                        borderWidth: 1.5,
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 7,
+                             ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['Inicio', 'Básico', 'Intermedio', 'Avanzado', 'Experto', 'Maestría', ''];
+                                    return labels[value] || '';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Progresión del Aprendizaje a lo Largo de 6 Meses',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            },
+                            color: '#44403c',
+                            padding: {
+                                bottom: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return learningPathData[context[0].dataIndex].month;
+                                },
+                                label: function(context) {
+                                    return `Enfoque: ${learningPathData[context.dataIndex].focus}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
